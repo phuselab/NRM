@@ -509,11 +509,12 @@ values. Conflating them is what makes a chance-level model look competitive.
 ## Citation
 
 ```bibtex
-@inproceedings{nrm2026,
+@inproceedings{ghezzi2026neuralrace,
   title     = {The Neural Race Model},
+  author    = {Ghezzi, Omar and D'Amelio, Alessandro and Cuculo, Vittorio and
+               Cucchiara, Rita and Boccignone, Giuseppe},
   booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
-  year      = {2026},
-  note      = {Spotlight}
+  year      = {2026}
 }
 ```
 
