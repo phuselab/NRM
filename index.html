@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Neural Race Model | NeurIPS 2026 Spotlight</title>
+<meta name="description" content="The Neural Race Model (NRM): a stimulus-conditional neural SDE in which one accumulator per alternative races to a learnable threshold, trained end-to-end on human choices and reaction times.">
+<meta property="og:title" content="The Neural Race Model (NeurIPS 2026 Spotlight)">
+<meta property="og:description" content="Image-computable, continuous-time, stochastic evidence accumulation trained end-to-end on human reaction times and choices.">
+<meta property="og:image" content="assets/fig1_pipeline.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
+</head>
+<body>
+
+<header class="hero wrap">
+  <div class="venue"><span aria-hidden="true"></span>NeurIPS 2026 Spotlight</div>
+  <h1>The Neural Race Model</h1>
+  <p class="sub">Stimulus-conditional stochastic accumulation, trained end-to-end on how people choose and how long they take.</p>
+  <div class="authors">
+    <span>Omar Ghezzi<sup>1</sup></span><span>Alessandro D'Amelio<sup>1</sup></span><span>Vittorio Cuculo<sup>2</sup></span><span>Rita Cucchiara<sup>2</sup></span><span>Giuseppe Boccignone<sup>1</sup></span>
+  </div>
+  <div class="affil"><span><sup>1</sup>University of Milan</span><span><sup>2</sup>University of Modena and Reggio Emilia</span></div>
+  <div class="emails"><a href="mailto:omar.ghezzi@unimi.it">omar.ghezzi@unimi.it</a><a href="mailto:alessandro.damelio@unimi.it">alessandro.damelio@unimi.it</a><a href="mailto:vittorio.cuculo@unimore.it">vittorio.cuculo@unimore.it</a><a href="mailto:rita.cucchiara@unimore.it">rita.cucchiara@unimore.it</a><a href="mailto:giuseppe.boccignone@unimi.it">giuseppe.boccignone@unimi.it</a></div>
+  <nav class="links" aria-label="Paper resources">
+    <!-- TODO: replace the # placeholders with the real URLs -->
+    <a class="btn solid" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Paper</a>
+    <a class="btn" href="https://github.com/phuselab/NRM"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>Code</a>
+    <a class="btn" href="#">OpenReview</a>
+    <a class="btn" href="#bibtex">BibTeX</a><!-- TODO: final BibTeX entry -->
+  </nav>
+
+  <div class="race-stage">
+    <div class="race-row">
+      <figure class="stim">
+        <div class="stim-head">Stimulus</div>
+        <div class="stim-frame"><img id="heroStim" src="assets/stimuli/dog.jpg" alt="Stimulus shown on this trial"><canvas id="heroNoise" aria-hidden="true"></canvas></div>
+        <figcaption class="stim-meta">
+          <span class="stim-label" id="heroStimCap">dog</span>
+          <span class="stim-clar">clarity <b id="heroClarityV">–</b></span>
+        </figcaption>
+        <div class="meter" aria-hidden="true"><i id="heroClarity"></i></div>
+      </figure>
+      <canvas id="hero" aria-label="Animated simulation: four evidence accumulators race towards a stimulus-dependent threshold" role="img"></canvas>
+    </div>
+    <div class="stage-bar">
+      <div class="readout" id="heroReadout" aria-live="polite">Evidence for four alternatives accumulates until one hits the bound.</div>
+      <button class="btn" id="heroBtn" type="button">Run another trial</button>
+    </div>
+    <p class="stage-note">Each trial draws a new stimulus (the image beside the race). It sets the drift of every accumulator and the height of the bound: a clear image drives its own accumulator hard and the race ends early, a degraded one (blurred, noisy) leaves the evidence weak and ambiguous, so the race runs longer and errors become more likely.</p>
+  </div>
+</header>
+
+<section id="summary">
+  <div class="wrap">
+    <div class="text">
+      <h2>Why this matters</h2>
+      <p class="lede">A perceptual decision takes time, and that time is data. For fifty years, race and drift-diffusion models have explained choices and reaction times with a few interpretable parameters, but they are blind to the stimulus itself: whatever an image contains must first be squeezed into a single number such as "coherence".</p>
+      <p>Deep networks, on the other hand, see images but not time. Existing image-computable reaction-time models read out a proxy (confidence, entropy, the number of recurrent steps or FLOPs) that correlates with RT and must be rescaled to milliseconds afterwards.</p>
+      <p>The Neural Race Model keeps the race. It is a neural stochastic differential equation in which one accumulator per alternative races in continuous time towards a learnable, stimulus-dependent threshold. Drift, diffusion and threshold are neural networks conditioned on a stimulus embedding, and the whole model is trained end-to-end on the joint likelihood of human choices and reaction times.</p>
+    </div>
+    <div class="claims">
+      <div class="claim"><div class="num">0.834<small>vs 0.840 human</small></div><p>Scene categorisation accuracy, within 0.006 of the human noise ceiling and the closest of all models.</p></div>
+      <div class="claim"><div class="num">0.989<small>vs 0.971 human</small></div><p>Chronometric correlation on random-dot motion: the model's RT curve across coherence matches human median RTs.</p></div>
+      <div class="claim"><div class="num">3 of 3<small>conditions</small></div><p>Lowest speed–accuracy curve error on SATBench, with a single model and no per-deadline refitting.</p></div>
+      <div class="claim"><div class="num">ms<small>not a proxy</small></div><p>Reaction times come directly from a first-passage event, in physical time, with no post-hoc rescaling.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="method">
+  <div class="wrap">
+    <div class="text">
+      <h2>How it works</h2>
+      <p>The evidence state <i>X<sub>t</sub></i> ∈ ℝ<sup><i>N</i></sup> holds one accumulator per alternative. A conditioning encoder turns the stimulus into a vector <b>c</b>, which parametrises every part of the race:</p>
+    </div>
+    <p class="eq">dX<sub>t</sub> = f<sub>θ</sub>(t, X<sub>t</sub>, <b>c</b>) dt + g<sub>φ</sub>(t, X<sub>t</sub>, <b>c</b>) dW<sub>t</sub>,&nbsp;&nbsp;&nbsp; Θ(<b>c</b>) = exp h<sub>Θ</sub>(<b>c</b>)</p>
+    <figure class="plate">
+      <img src="assets/fig1_pipeline.png" alt="NRM pipeline. Top: training, where inputs are encoded into a conditioning vector that parametrises drift, diffusion and threshold networks of a neural SDE, with a soft first-passage surrogate and an NLL loss against human RT and choice data. Bottom: inference, where a hard argmax over first crossings yields predicted choice and RT." loading="lazy" width="1867" height="903">
+      <figcaption>Training (top) uses a smooth first-passage surrogate so gradients flow through the stochastic race. At test time (bottom) the surrogate is removed and the classical hard race produces the choice and the reaction time.</figcaption>
+    </figure>
+    <ol class="steps">
+      <li><h3>Condition on the stimulus</h3><p>A modular encoder maps images, videos, scalars or categories to <b>c</b>. For video, <b>c</b><sub>t</sub> changes at every integration step.</p></li>
+      <li><h3>Race in continuous time</h3><p>Neural drift and diffusion push the accumulators; a neural threshold sets the bound, so urgency can depend on what is seen.</p></li>
+      <li><h3>Smooth the finish line</h3><p>A sigmoid of width 1/κ replaces the hard crossing. Monte Carlo trajectories give a soft first-passage density and choice probabilities, trained by NLL through the stochastic adjoint.</p></li>
+      <li><h3>Race for real at test time</h3><p>The surrogate is dropped. The first accumulator to cross Θ gives the choice; the crossing time gives the RT.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="playground">
+  <div class="wrap">
+    <div class="text">
+      <h2>Play with a race</h2>
+      <p>Below is a two-alternative race of the kind the NRM generalises. Stimulus strength raises the drift of the correct accumulator. Watch the two signatures of human decisions appear: stronger evidence gives faster and more accurate choices, and a higher bound buys accuracy at the cost of time.</p>
+    </div>
+    <div class="lab">
+      <div class="panel">
+        <canvas id="pgTraj" height="260" role="img" aria-label="Sample accumulator trajectories racing to the threshold"></canvas>
+        <canvas id="pgHist" height="170" role="img" aria-label="Reaction time histograms for correct choices above and errors below"></canvas>
+        <div class="legend"><span><i style="background:var(--a)"></i>correct accumulator</span><span><i style="background:var(--b)"></i>incorrect accumulator</span><span><i style="background:var(--thr)"></i>threshold Θ</span><span>histogram: correct above, errors below</span></div>
+      </div>
+      <div class="panel controls">
+        <div class="ctl"><label for="pgCoh">Stimulus strength <output id="pgCohV"></output></label><input id="pgCoh" type="range" min="0" max="0.5" step="0.01" value="0.08"><div class="hint">Like motion coherence: how much the stimulus favours one side.</div></div>
+        <div class="ctl"><label for="pgSig">Noise σ <output id="pgSigV"></output></label><input id="pgSig" type="range" min="0.3" max="1.6" step="0.05" value="0.9"></div>
+        <div class="ctl"><label for="pgThr">Threshold Θ <output id="pgThrV"></output></label><input id="pgThr" type="range" min="0.4" max="2.2" step="0.05" value="1.1"><div class="hint">Raise it for caution, lower it for speed.</div></div>
+        <div class="stats">
+          <div class="stat"><div class="v" id="stAcc">–</div><div class="k">accuracy</div></div>
+          <div class="stat"><div class="v" id="stRT">–</div><div class="k">median RT</div></div>
+          <div class="stat"><div class="v" id="stRTc">–</div><div class="k">median RT, correct</div></div>
+          <div class="stat"><div class="v" id="stRTe">–</div><div class="k">median RT, errors</div></div>
+        </div>
+        <button class="btn solid" id="pgSweep" type="button">Sweep all strengths</button>
+      </div>
+    </div>
+    <div class="twin" id="sweepOut" hidden>
+      <div class="chart"><h4>Psychometric function</h4><div id="swAcc"></div></div>
+      <div class="chart"><h4>Chronometric function</h4><div id="swRT"></div></div>
+    </div>
+    <p class="callout text">In a classical model, "stimulus strength" is one hand-picked number per trial. In the NRM, drift, noise and threshold are all computed from the stimulus embedding itself, so two images with the same nominal difficulty can still produce different races.</p>
+  </div>
+</section>
+
+<section id="surrogate">
+  <div class="wrap">
+    <div class="text">
+      <h2>Making the finish line differentiable</h2>
+      <p>A hard threshold crossing has no useful gradient. The NRM replaces it with a soft crossing probability σ(κ(X − Θ)), takes the positive increments of that probability along each simulated path, and averages over <i>M</i> trajectories to obtain a soft first-passage-time density. As κ grows, the soft density converges to the true one, at rate O(√Δt + 1/κ + 1/√M).</p>
+      <p>Drag κ to see the trade-off: small κ gives smooth gradients but a smeared, shifted density; large κ is exact but noisier to differentiate. The paper shows the budget-optimal sharpness scales as κ<sup>⋆</sup> ∼ M<sup>1/3</sup>.</p>
+    </div>
+    <div class="lab">
+      <div class="panel">
+        <canvas id="sgTraj" height="220" role="img" aria-label="One trajectory with the soft threshold band"></canvas>
+        <canvas id="sgDens" height="210" role="img" aria-label="Soft first-passage density compared with the hard first-passage histogram"></canvas>
+        <div class="legend"><span><i style="background:var(--thr)"></i>soft crossing band, width ~1/κ</span><span><i style="background:var(--b)"></i>soft FPT density (training)</span><span><i style="background:#9AA6B8"></i>hard FPT histogram (test)</span></div>
+      </div>
+      <div class="panel controls">
+        <div class="ctl"><label for="sgK">Sharpness κ <output id="sgKV"></output></label><input id="sgK" type="range" min="0" max="1" step="0.005" value="0.35"><div class="hint">The paper trains with κ = 100.</div></div>
+        <div class="ctl"><label for="sgM">Monte Carlo trajectories M <output id="sgMV"></output></label><input id="sgM" type="range" min="10" max="600" step="10" value="200"><div class="hint">Bin-wise noise shrinks like 1/√M.</div></div>
+        <div class="stats">
+          <div class="stat"><div class="v" id="sgTV">–</div><div class="k">distance to hard density (total variation)</div></div>
+          <div class="stat"><div class="v" id="sgShift">–</div><div class="k">mean RT shift, soft minus hard</div></div>
+        </div>
+        <button class="btn" id="sgNew" type="button">Draw new trajectories</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <div class="text">
+      <h2>Results on three benchmarks</h2>
+      <p>The NRM is compared against classical sequential-sampling models (LNR, LBA, DDM), image-computable RT models (RTify, cRNN) and anytime-prediction networks (CNet, ConvRNN, MSDNet, SCAN). Human curves are shown as a noise ceiling.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Benchmarks">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="t-rdm" id="b-rdm">Random-dot motion</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="t-sc" id="b-sc">Scene categorisation</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="t-sat" id="b-sat">Speed–accuracy trade-off</button>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" id="t-rdm" aria-labelledby="b-rdm">
+      <p class="text">Videos of moving dots at seven coherence levels, 21 observers. The NRM is conditioned on a time-varying motion-energy signal and is the only model that reproduces both the rising psychometric curve and the falling chronometric curve.</p>
+      <div class="charts">
+        <div class="chart"><h4>Accuracy vs coherence</h4><div id="cRdmAcc"></div></div>
+        <div class="chart"><h4>Median RT vs coherence (ms)</h4><div id="cRdmRT"></div></div>
+      </div>
+      <p class="honest">Global results: accuracy 0.794, κ 0.585, best RT likelihood (NLL −0.147 vs human −0.204). The NRM overshoots human accuracy at high coherence.</p>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" id="t-sc" aria-labelledby="b-sc" hidden>
+      <p class="text">Natural vs manmade scenes flashed for 7 ms, five discriminability levels. Images are encoded with a frozen DINOv2-small backbone. The NRM is the only model ranked first or second on accuracy and κ at every level, including the hardest near-boundary images where RTify and cRNN fall below chance.</p>
+      <div class="charts">
+        <div class="chart"><h4>Accuracy vs discriminability</h4><div id="cScAcc"></div></div>
+        <div class="chart"><h4>Global choice agreement (Cohen's κ)</h4><div id="cScK"></div></div>
+      </div>
+      <p class="honest">Honest caveat: on RT distribution fit (NLL) the classical models win here. Human RTs in this task are tightly squeezed by a 500 ms deadline, so a stimulus-blind model that fits the marginal distribution scores well, while image-conditioned models spread their predictions.</p>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" id="t-sat" aria-labelledby="b-sat" hidden>
+      <p class="text">16-way ImageNet recognition under colour, noise and blur perturbations, with the response cued by a beep at five deadlines. The NRM receives the deadline as one more input to its encoder, so one model covers every deadline, and it still produces its own trial-level RT, which the anytime networks cannot.</p>
+      <div class="charts">
+        <div class="chart" style="grid-column:1/-1"><h4>SAT curve-fit error to the average human (RMSE, lower is better)</h4><div id="cSat"></div></div>
+      </div>
+      <p class="honest">Lowest RMSE in all three conditions, and the closest curve steepness in two. Category-wise correlation is where the NRM does not lead; CNet variants rank higher on that metric.</p>
+    </div>
+
+    <details class="fig">
+      <summary>Show the full figures from the paper</summary>
+      <figure class="plate"><img src="assets/fig2_results.png" alt="Figure 2 of the paper: accuracy, median RT and NLL curves for the random-dot motion task (top) and the scene categorisation task (bottom), comparing NRM with baselines and the human noise ceiling." loading="lazy"><figcaption>Random-dot motion (top) and scene categorisation (bottom): accuracy, median RT and NLL for every model against the human noise ceiling.</figcaption></figure>
+      <figure class="plate"><img src="assets/fig3_satbench.png" alt="Figure 3 of the paper: speed–accuracy trade-off curves for Color and Blur, Color and Gray, Gray and Noise conditions, with RMSE and Spearman insets." loading="lazy"><figcaption>SATBench speed–accuracy curves for Color &amp; Blur, Color &amp; Gray and Gray &amp; Noise.</figcaption></figure>
+    </details>
+  </div>
+</section>
+
+<section id="races">
+  <div class="wrap">
+    <div class="text">
+      <h2>Watch the trained model decide</h2>
+      <p>Each animation is the released NRM on two held-out test trials, one easy and one hard. Beside the stimulus runs one sampled race: the accumulators, the bound Θ(<b>c</b>) the model computes from that stimulus, its crossing time t* and the human RT for the same stimulus. Below each race, the share of 64 simulated races that pick the correct answer.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Race animations">
+      <button class="tab" role="tab" aria-selected="true" aria-controls="r-rdm" id="rb-rdm">Random-dot motion</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="r-sc" id="rb-sc">Scene categorisation</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="r-sat" id="rb-sat">Speed–accuracy trade-off</button>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" id="r-rdm" aria-labelledby="rb-rdm">
+      <p class="text">Dots drifting left at 51.2% and at 3.2% coherence. The motion-energy embedding changes frame by frame, and so does the push on each accumulator. With clear motion the left accumulator reaches the bound in about half a second and 94% of races choose left; at 3.2% the two stay close for longer and the share drops to 77%.</p>
+      <figure class="race"><img src="assets/nrm_rdm.gif" alt="Two random-dot motion trials, 51.2% and 3.2% coherence. Beside each dot video, the race of the left and right accumulators towards the bound, with the model's crossing time and the human RT." loading="lazy" width="960" height="640"><figcaption>The dots are drawn at 60 per frame instead of the experiment's 6, for legibility; the race is the model's response to the real trial.</figcaption></figure>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" id="r-sc" aria-labelledby="rb-sc" hidden>
+      <p class="text">A clearly natural scene (discriminability 1.0) and one close to the category boundary (0.2). Both start from the same place; what differs is how fast the natural accumulator pulls away from the man-made one. 86% of races choose natural for the clear scene, 52% for the ambiguous one.</p>
+      <figure class="race"><img src="assets/nrm_sc.gif" alt="Two scene categorisation trials, discriminability 1.0 and 0.2. Beside each scene, the race of the natural and man-made accumulators towards the bound." loading="lazy" width="960" height="640"><figcaption>Stimuli from Sofer, Crouzet &amp; Serre (2015), CC BY 4.0.</figcaption></figure>
+    </div>
+
+    <div class="tabpanel" role="tabpanel" id="r-sat" aria-labelledby="rb-sat" hidden>
+      <p class="text">The same blurred boat under a 500 ms and a 1500 ms deadline. Sixteen accumulators race, one per category, and the deadline is one more input to the encoder. With 1.5 s the boat accumulator wins 98% of races; at 500 ms only about half, and the winning race lands after the beep. People shown this image at 500 ms almost never name it correctly.</p>
+      <figure class="race"><img src="assets/nrm_sat.gif" alt="The same blurred boat image under a 500 ms and a 1500 ms deadline. Beside it, a 16-way race: the boat accumulator in blue, the distractors in grey, with the deadline, the model's crossing time and the median human RT." loading="lazy" width="960" height="640"><figcaption>ImageNet images cannot be redistributed: the photo is a CC0 boat from Wikimedia Commons with the trial's perturbation (greyscale, blur σ = 3); the race is the model's response to the real image.</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="brain">
+  <div class="wrap">
+    <div class="text">
+      <h2>Readable in the language of the brain</h2>
+      <p>Because the NRM keeps the accumulate-to-bound structure, each component has a natural counterpart in the primate decision circuit. The paper offers this as interpretive commentary, not a mechanistic claim, and marks where the analogy breaks.</p>
+    </div>
+    <div class="tblwrap">
+      <table class="maptbl">
+        <thead><tr><th>NRM component</th><th>Approximate substrate</th><th>How close</th></tr></thead>
+        <tbody>
+          <tr><td>Encoder h<sub>ψ</sub></td><td>Ventral stream V1→V4→IT; MT/V5 for motion</td><td><span class="pill weak">partial: frozen, feedforward</span></td></tr>
+          <tr><td>Drift f<sub>θ</sub></td><td>Coherence-selective MT→LIP drive</td><td><span class="pill strong">strong</span></td></tr>
+          <tr><td>Evidence X<sub>t</sub></td><td>LIP, FEF, pre-SMA ramping; human CPP (EEG)</td><td><span class="pill strong">strong</span></td></tr>
+          <tr><td>Diffusion g<sub>φ</sub></td><td>Structured, shared cortical variability</td><td><span class="pill weak">open question</span></td></tr>
+          <tr><td>Threshold Θ(<b>c</b>)</td><td>Cortico-basal ganglia loop: striatum, STN, GPi</td><td><span class="pill strong">strong</span></td></tr>
+          <tr><td>First passage t*</td><td>Superior colliculus all-or-none burst; FEF</td><td><span class="pill strong">strong</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <details class="fig">
+      <summary>Show the circuit schematic</summary>
+      <figure class="plate"><img src="assets/fig10_circuit.png" alt="Schematic mapping NRM components onto the primate perceptual decision circuit, from sensory input through IT and MT, to LIP, the cortico-basal ganglia loop, superior colliculus and dopamine." loading="lazy"><figcaption>NRM components placed on the primate perceptual-decision circuit (Appendix D of the paper).</figcaption></figure>
+    </details>
+  </div>
+</section>
+
+<section id="bibtex">
+  <div class="wrap">
+    <h2>Cite</h2>
+    <!-- TODO: update the BibTeX entry with the proceedings details -->
+    <pre class="bib" id="bibText">@inproceedings{ghezzi2026neuralrace,
+  title     = {The Neural Race Model},
+  author    = {Ghezzi, Omar and D'Amelio, Alessandro and Cuculo, Vittorio and
+               Cucchiara, Rita and Boccignone, Giuseppe},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2026}
+}</pre>
+    <button class="btn" id="copyBib" type="button">Copy BibTeX</button>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">The interactive races at the top of this page are simplified illustrations written for this site, not the trained NRM; the animations under “Watch the trained model decide” are the released NRM on held-out test trials. All reported numbers come from the paper. Stimulus photos: Wikimedia Commons, CC0 (<a href="https://commons.wikimedia.org/wiki/File:Domestic_shorthair_cat_portrait_in_grass.jpg">cat</a>, <a href="https://commons.wikimedia.org/wiki/File:Dog_resting_on_the_grass.jpg">dog</a>, <a href="https://commons.wikimedia.org/wiki/File:PINK_AUTOMOBILE_MANUFACTURED_BY_CADILLAC.jpg">car</a>, <a href="https://commons.wikimedia.org/wiki/File:Blue_fishing_boat_harbour_Eretria_Euboea_Greece.jpg">boat</a>).</div>
+</footer>
+
+<script src="main.js?v=4"></script>
+</body>
+</html>
