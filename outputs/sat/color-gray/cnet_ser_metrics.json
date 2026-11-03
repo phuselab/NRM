@@ -1,0 +1,8 @@
+{
+  "satbench_metrics": {
+    "ermse": 26.570203984324635,
+    "spearman_r": 0.4699100321007433,
+    "steepness": 1.5272523063800647,
+    "steepness_human": 0.7258387372122866
+  }
+}

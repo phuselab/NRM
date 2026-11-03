@@ -1,0 +1,36 @@
+[project]
+name = "nrm"
+version = "1.0.0"
+description = "The Neural Race Model — NeurIPS 2026"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0",
+    "torchsde>=0.2.6",
+    "torchvision>=0.15",
+    "transformers>=4.30",
+    "scipy>=1.10",
+    "scikit-learn>=1.2",
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "matplotlib>=3.7",
+    "seaborn>=0.12",
+    "tqdm>=4.65",
+    "pillow>=9.5",
+    "jupyter>=1.0",
+    "h5py>=3.8",
+    "pyyaml>=6.0",
+    "opencv-python>=4.8",
+    "pypdf>=4.0",
+]
+
+[project.optional-dependencies]
+data = [
+    "pyarrow>=25.0.1",
+]
+kaggle = [
+    "kaggle>=2.2.4; python_version >= '3.11'",  # 2.x: OAuth login
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

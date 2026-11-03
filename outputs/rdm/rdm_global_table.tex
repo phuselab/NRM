@@ -1,0 +1,45 @@
+\begin{table}[t]
+  \centering
+  \caption{%
+    RDM task. Choice performance is measured by Acc, AUC, and Cohen's~$\kappa$
+    ($\kappa_{\mathrm{acc}}$); RT alignment by $r_{\rm RT}$; and RT distribution
+    fit by NLL.
+    \textbf{Bold} = best; \underline{underline} = second best (relative to NC,
+    or absolute for NLL and $r_{\rm RT}$).
+    Asymmetric 95\% CIs (bootstrap, $B{=}1000$) shown as superscripts/subscripts;
+    NLL reports $\pm$ Std. Error of the Mean.
+  }
+  \label{tab:rdm_global}
+  \footnotesize
+  \setlength{\tabcolsep}{5pt}
+  \renewcommand{\arraystretch}{1.4}
+  \resizebox{.85\linewidth}{!}{%
+  \begin{tabular}{@{} l ccc cc @{}}
+    \toprule
+    & \multicolumn{3}{c}{\textbf{Choice}}
+    & \multicolumn{2}{c}{\textbf{RT}} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-6}
+    \textbf{Model}
+      & Acc ($|\Delta|\!\downarrow$)
+      & AUC ($|\Delta|\!\downarrow$)
+      & $\kappa_{\mathrm{acc}}$ ($|\Delta|\!\downarrow$)
+      & $r_{\rm RT}$ ($\uparrow$)
+      & NLL ($\downarrow$) \\
+    \midrule
+    \textbf{Human~(NC)} & \textbf{0.689} & \textbf{0.690} & \textbf{0.379} & \textbf{0.971} & \textbf{$-$0.204} \\
+    \midrule
+    \rowcolor{Gray}
+    \multicolumn{6}{l}{\textit{Classical Sequential Sampling Approaches}} \\
+    LNR~\citep{rouder2015lognormal} & 0.482$^{+.013}_{-.013}$ & 0.482$^{+.013}_{-.012}$ & $-$0.036$^{+.026}_{-.025}$ & $-$0.547$^{+1.076}_{-.289}$ & $-$0.121$^{\pm.010}$ \\
+    LBA~\citep{brown2008lba} & 0.505$^{+.013}_{-.013}$ & \underline{0.505}$^{+.013}_{-.013}$ & 0.010$^{+.027}_{-.026}$ & 0.497$^{+.336}_{-1.015}$ & $-$0.117$^{\pm.010}$ \\
+    DDM~\citep{ratcliff2008diffusion} & 0.501$^{+.013}_{-.014}$ & 0.502$^{+.012}_{-.014}$ & 0.003$^{+.025}_{-.028}$ & $-$0.720$^{+.830}_{-.172}$ & \underline{$-$0.122}$^{\pm.010}$ \\
+    \midrule
+    \rowcolor{Gray}
+    \multicolumn{6}{l}{\textit{Video-Computable Approaches}} \\
+    RTify~\citep{cheng2024rtify} & \underline{0.548}$^{+.013}_{-.013}$ & \textbf{0.548}$^{+.013}_{-.013}$ & \underline{0.095}$^{+.025}_{-.026}$ & \underline{0.821}$^{+.107}_{-.186}$ & $-$0.067$^{\pm.010}$ \\
+    \midrule
+    NRM~(ours) & \textbf{0.794}$^{+.010}_{-.009}$ & 0.924$^{+.007}_{-.007}$ & \textbf{0.585}$^{+.013}_{-.012}$ & \textbf{0.989}$^{+.007}_{-.037}$ & \textbf{$-$0.147}$^{\pm.008}$ \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}

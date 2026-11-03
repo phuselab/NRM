@@ -1,0 +1,54 @@
+# NRM configuration
+# Edit this file to select benchmark, mode, and hyperparameters.
+
+# -- Benchmark selection --
+benchmark: rdm          # rdm | sat | sc
+
+# -- Mode --
+mode: train             # train | eval | both
+
+# -- Perturbation (SAT only) --
+perturbation: color-blur  # color-blur | color-gray | gray-noise
+
+# -- Paths --
+paths:
+  data_dir: ./datasets
+  embeddings_dir: ./embeddings
+  weights_dir: ./nrm/weights
+  output_dir: ./outputs
+  checkpoint_dir: ./checkpoints
+
+# -- Model --
+model:
+  n_choices: 2           # 2 (RDM, SC) | 16 (SAT)
+  cond_dim: 32           # 32 (RDM, SC) | 128 (SAT)
+  dt: 0.01
+  t_max: 3.0             # 3.0 (RDM, SC) | 5.0 (SAT)
+  use_adjoint: false
+
+# -- Training --
+training:
+  seed: 42
+  epochs: 100
+  patience: 10
+  batch_size: 256
+  n_reps: 64
+  lr: 1.0e-3             # 1e-3 (RDM, SC) | 1e-1 (SAT)
+  val_size: 0.1
+  test_size: 0.1         # 0.1 (RDM) | 0.2 (SAT, SC)
+
+# -- SC-specific --
+sc:
+  projection_dim: 18     # linear projection of DINOv2 features
+
+# -- RDM-specific --
+rdm:
+  fs: 75                 # stimulus frame rate (Hz)
+  me_n_dir: 8
+  me_speeds: [0.5, 1.0, 2.0]
+  me_lam: 8.0
+  me_sigma_xy: 4.0
+  me_sigma_t: 3.0
+  me_kx: 13
+  me_ky: 13
+  me_kt: 7

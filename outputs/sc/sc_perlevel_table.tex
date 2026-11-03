@@ -1,0 +1,54 @@
+\begin{table}[t]
+  \centering
+  \caption{SC task: each block shows one metric across discriminability levels $\{$0.2, 0.4, 0.6, 0.8, 1.0$\}$. NRM has DINOv2 as visual backbone. \textit{Avg}: mean over the levels, for every row (identical to the global table). Superscript grey values give $|\Delta|$ from Human~(NC). \textbf{Bold} = best model per column, \underline{underline} = second best (smallest $|\Delta|$, lowest value for NLL).}
+  \label{tab:sc_perlevel}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \resizebox{\linewidth}{!}{%
+  \begin{tabular}{@{} ll ccccc c @{}}
+    \toprule
+    & & \multicolumn{5}{c}{\textbf{Discriminability Levels}} & \\
+    \cmidrule(lr){3-7}
+    \textbf{Model} & \textbf{Metric} & 0.2 & 0.4 & 0.6 & 0.8 & 1.0 & \textit{Avg} \\
+    \midrule
+    \multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}Human\\(NC)\end{tabular}} & Acc & 0.738 & 0.818 & 0.825 & 0.880 & 0.913 & 0.840 \\
+     & AUC & 0.744 & 0.816 & 0.825 & 0.881 & 0.909 & 0.840 \\
+     & $\kappa$ & 0.477 & 0.634 & 0.650 & 0.761 & 0.814 & 0.679 \\
+     & NLL & $-$1.396 & $-$1.414 & $-$1.402 & $-$1.467 & $-$1.385 & $-$1.413 \\
+    \midrule
+    \rowcolor{Gray}
+    \multicolumn{8}{l}{\textit{Classical Sequential Sampling Approaches}} \\
+    \multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}LNR \\ \citep{rouder2015lognormal}\end{tabular}} & Acc & 0.495\textsuperscript{\textcolor{gray}{\tiny 0.243}} & 0.489\textsuperscript{\textcolor{gray}{\tiny 0.329}} & 0.475\textsuperscript{\textcolor{gray}{\tiny 0.350}} & 0.489\textsuperscript{\textcolor{gray}{\tiny 0.391}} & 0.516\textsuperscript{\textcolor{gray}{\tiny 0.397}} & 0.491\textsuperscript{\textcolor{gray}{\tiny 0.349}} \\
+     & AUC & 0.489\textsuperscript{\textcolor{gray}{\tiny 0.255}} & 0.488\textsuperscript{\textcolor{gray}{\tiny 0.328}} & 0.476\textsuperscript{\textcolor{gray}{\tiny 0.350}} & 0.490\textsuperscript{\textcolor{gray}{\tiny 0.391}} & 0.521\textsuperscript{\textcolor{gray}{\tiny 0.388}} & 0.493\textsuperscript{\textcolor{gray}{\tiny 0.347}} \\
+     & $\kappa$ & $-$0.021\textsuperscript{\textcolor{gray}{\tiny 0.499}} & $-$0.024\textsuperscript{\textcolor{gray}{\tiny 0.658}} & $-$0.049\textsuperscript{\textcolor{gray}{\tiny 0.699}} & $-$0.020\textsuperscript{\textcolor{gray}{\tiny 0.781}} & 0.039\textsuperscript{\textcolor{gray}{\tiny 0.775}} & $-$0.015\textsuperscript{\textcolor{gray}{\tiny 0.694}} \\
+     & NLL & \textbf{$-$1.371}\textsuperscript{\textcolor{gray}{\tiny 0.025}} & \textbf{$-$1.397}\textsuperscript{\textcolor{gray}{\tiny 0.017}} & \textbf{$-$1.374}\textsuperscript{\textcolor{gray}{\tiny 0.028}} & \underline{$-$1.451}\textsuperscript{\textcolor{gray}{\tiny 0.016}} & \textbf{$-$1.378}\textsuperscript{\textcolor{gray}{\tiny 0.007}} & \textbf{$-$1.394}\textsuperscript{\textcolor{gray}{\tiny 0.019}} \\
+    \addlinespace
+    \multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}LBA \\ \citep{brown2008lba}\end{tabular}} & Acc & \underline{0.542}\textsuperscript{\textcolor{gray}{\tiny 0.196}} & 0.446\textsuperscript{\textcolor{gray}{\tiny 0.371}} & 0.528\textsuperscript{\textcolor{gray}{\tiny 0.297}} & 0.497\textsuperscript{\textcolor{gray}{\tiny 0.383}} & 0.563\textsuperscript{\textcolor{gray}{\tiny 0.349}} & 0.513\textsuperscript{\textcolor{gray}{\tiny 0.328}} \\
+     & AUC & \underline{0.545}\textsuperscript{\textcolor{gray}{\tiny 0.199}} & 0.446\textsuperscript{\textcolor{gray}{\tiny 0.371}} & 0.528\textsuperscript{\textcolor{gray}{\tiny 0.297}} & 0.497\textsuperscript{\textcolor{gray}{\tiny 0.384}} & 0.572\textsuperscript{\textcolor{gray}{\tiny 0.337}} & 0.518\textsuperscript{\textcolor{gray}{\tiny 0.323}} \\
+     & $\kappa$ & \underline{0.088}\textsuperscript{\textcolor{gray}{\tiny 0.390}} & $-$0.108\textsuperscript{\textcolor{gray}{\tiny 0.743}} & 0.056\textsuperscript{\textcolor{gray}{\tiny 0.595}} & $-$0.007\textsuperscript{\textcolor{gray}{\tiny 0.767}} & 0.134\textsuperscript{\textcolor{gray}{\tiny 0.680}} & 0.033\textsuperscript{\textcolor{gray}{\tiny 0.647}} \\
+     & NLL & $-$1.345\textsuperscript{\textcolor{gray}{\tiny 0.051}} & $-$1.367\textsuperscript{\textcolor{gray}{\tiny 0.047}} & $-$1.334\textsuperscript{\textcolor{gray}{\tiny 0.069}} & $-$1.430\textsuperscript{\textcolor{gray}{\tiny 0.037}} & $-$1.290\textsuperscript{\textcolor{gray}{\tiny 0.095}} & $-$1.353\textsuperscript{\textcolor{gray}{\tiny 0.060}} \\
+    \addlinespace
+    \multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}DDM \\ \citep{ratcliff2008diffusion}\end{tabular}} & Acc & 0.523\textsuperscript{\textcolor{gray}{\tiny 0.215}} & 0.479\textsuperscript{\textcolor{gray}{\tiny 0.339}} & 0.499\textsuperscript{\textcolor{gray}{\tiny 0.327}} & 0.540\textsuperscript{\textcolor{gray}{\tiny 0.340}} & 0.496\textsuperscript{\textcolor{gray}{\tiny 0.417}} & 0.509\textsuperscript{\textcolor{gray}{\tiny 0.332}} \\
+     & AUC & 0.522\textsuperscript{\textcolor{gray}{\tiny 0.222}} & 0.477\textsuperscript{\textcolor{gray}{\tiny 0.340}} & 0.498\textsuperscript{\textcolor{gray}{\tiny 0.327}} & 0.539\textsuperscript{\textcolor{gray}{\tiny 0.342}} & 0.497\textsuperscript{\textcolor{gray}{\tiny 0.412}} & 0.507\textsuperscript{\textcolor{gray}{\tiny 0.333}} \\
+     & $\kappa$ & 0.043\textsuperscript{\textcolor{gray}{\tiny 0.434}} & $-$0.046\textsuperscript{\textcolor{gray}{\tiny 0.681}} & $-$0.003\textsuperscript{\textcolor{gray}{\tiny 0.654}} & 0.078\textsuperscript{\textcolor{gray}{\tiny 0.682}} & $-$0.006\textsuperscript{\textcolor{gray}{\tiny 0.820}} & 0.013\textsuperscript{\textcolor{gray}{\tiny 0.666}} \\
+     & NLL & \underline{$-$1.357}\textsuperscript{\textcolor{gray}{\tiny 0.038}} & \underline{$-$1.391}\textsuperscript{\textcolor{gray}{\tiny 0.023}} & \underline{$-$1.369}\textsuperscript{\textcolor{gray}{\tiny 0.034}} & \textbf{$-$1.452}\textsuperscript{\textcolor{gray}{\tiny 0.015}} & \underline{$-$1.329}\textsuperscript{\textcolor{gray}{\tiny 0.056}} & \underline{$-$1.380}\textsuperscript{\textcolor{gray}{\tiny 0.033}} \\
+    \midrule
+    \rowcolor{Gray}
+    \multicolumn{8}{l}{\textit{Image-Computable Approaches}} \\
+    \multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}RTify \\ \citep{cheng2024rtify}\end{tabular}} & Acc & 0.467\textsuperscript{\textcolor{gray}{\tiny 0.271}} & \underline{0.750}\textsuperscript{\textcolor{gray}{\tiny 0.068}} & \textbf{0.796}\textsuperscript{\textcolor{gray}{\tiny 0.029}} & \textbf{0.862}\textsuperscript{\textcolor{gray}{\tiny 0.019}} & 0.968\textsuperscript{\textcolor{gray}{\tiny 0.056}} & \underline{0.786}\textsuperscript{\textcolor{gray}{\tiny 0.055}} \\
+     & AUC & 0.519\textsuperscript{\textcolor{gray}{\tiny 0.225}} & \underline{0.919}\textsuperscript{\textcolor{gray}{\tiny 0.102}} & \textbf{0.937}\textsuperscript{\textcolor{gray}{\tiny 0.111}} & \underline{0.991}\textsuperscript{\textcolor{gray}{\tiny 0.111}} & \underline{1.000}\textsuperscript{\textcolor{gray}{\tiny 0.091}} & \textbf{0.873}\textsuperscript{\textcolor{gray}{\tiny 0.033}} \\
+     & $\kappa$ & 0.057\textsuperscript{\textcolor{gray}{\tiny 0.420}} & \underline{0.508}\textsuperscript{\textcolor{gray}{\tiny 0.126}} & \textbf{0.589}\textsuperscript{\textcolor{gray}{\tiny 0.061}} & \textbf{0.725}\textsuperscript{\textcolor{gray}{\tiny 0.036}} & 0.933\textsuperscript{\textcolor{gray}{\tiny 0.119}} & \underline{0.562}\textsuperscript{\textcolor{gray}{\tiny 0.117}} \\
+     & NLL & $-$0.202\textsuperscript{\textcolor{gray}{\tiny 1.194}} & 0.157\textsuperscript{\textcolor{gray}{\tiny 1.571}} & $-$0.219\textsuperscript{\textcolor{gray}{\tiny 1.184}} & 0.211\textsuperscript{\textcolor{gray}{\tiny 1.678}} & $-$0.160\textsuperscript{\textcolor{gray}{\tiny 1.225}} & $-$0.042\textsuperscript{\textcolor{gray}{\tiny 1.370}} \\
+    \addlinespace
+    \multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}cRNN \\ \citep{goetschalckx2023computing}\end{tabular}} & Acc & 0.379\textsuperscript{\textcolor{gray}{\tiny 0.360}} & 0.536\textsuperscript{\textcolor{gray}{\tiny 0.282}} & 0.627\textsuperscript{\textcolor{gray}{\tiny 0.198}} & 0.566\textsuperscript{\textcolor{gray}{\tiny 0.314}} & \textbf{0.937}\textsuperscript{\textcolor{gray}{\tiny 0.024}} & 0.611\textsuperscript{\textcolor{gray}{\tiny 0.229}} \\
+     & AUC & 0.274\textsuperscript{\textcolor{gray}{\tiny 0.470}} & 0.615\textsuperscript{\textcolor{gray}{\tiny 0.201}} & 0.606\textsuperscript{\textcolor{gray}{\tiny 0.219}} & 0.640\textsuperscript{\textcolor{gray}{\tiny 0.241}} & 1.000\textsuperscript{\textcolor{gray}{\tiny 0.091}} & 0.627\textsuperscript{\textcolor{gray}{\tiny 0.213}} \\
+     & $\kappa$ & $-$0.136\textsuperscript{\textcolor{gray}{\tiny 0.613}} & 0.079\textsuperscript{\textcolor{gray}{\tiny 0.555}} & 0.252\textsuperscript{\textcolor{gray}{\tiny 0.398}} & 0.134\textsuperscript{\textcolor{gray}{\tiny 0.626}} & \textbf{0.869}\textsuperscript{\textcolor{gray}{\tiny 0.055}} & 0.240\textsuperscript{\textcolor{gray}{\tiny 0.440}} \\
+     & NLL & $-$1.049\textsuperscript{\textcolor{gray}{\tiny 0.347}} & $-$1.099\textsuperscript{\textcolor{gray}{\tiny 0.316}} & $-$1.051\textsuperscript{\textcolor{gray}{\tiny 0.351}} & $-$1.147\textsuperscript{\textcolor{gray}{\tiny 0.320}} & $-$0.970\textsuperscript{\textcolor{gray}{\tiny 0.415}} & $-$1.063\textsuperscript{\textcolor{gray}{\tiny 0.350}} \\
+    \midrule
+    \multirow{4}{*}{\begin{tabular}[c]{@{}l@{}}NRM \\ (ours)\end{tabular}} & Acc & \textbf{0.752}\textsuperscript{\textcolor{gray}{\tiny 0.014}} & \textbf{0.832}\textsuperscript{\textcolor{gray}{\tiny 0.014}} & \underline{0.857}\textsuperscript{\textcolor{gray}{\tiny 0.032}} & \underline{0.790}\textsuperscript{\textcolor{gray}{\tiny 0.090}} & \underline{0.940}\textsuperscript{\textcolor{gray}{\tiny 0.028}} & \textbf{0.834}\textsuperscript{\textcolor{gray}{\tiny 0.006}} \\
+     & AUC & \textbf{0.852}\textsuperscript{\textcolor{gray}{\tiny 0.108}} & \textbf{0.907}\textsuperscript{\textcolor{gray}{\tiny 0.091}} & \underline{0.955}\textsuperscript{\textcolor{gray}{\tiny 0.129}} & \textbf{0.876}\textsuperscript{\textcolor{gray}{\tiny 0.004}} & \textbf{0.988}\textsuperscript{\textcolor{gray}{\tiny 0.079}} & \underline{0.916}\textsuperscript{\textcolor{gray}{\tiny 0.075}} \\
+     & $\kappa$ & \textbf{0.498}\textsuperscript{\textcolor{gray}{\tiny 0.021}} & \textbf{0.663}\textsuperscript{\textcolor{gray}{\tiny 0.029}} & \underline{0.714}\textsuperscript{\textcolor{gray}{\tiny 0.064}} & \underline{0.579}\textsuperscript{\textcolor{gray}{\tiny 0.182}} & \underline{0.875}\textsuperscript{\textcolor{gray}{\tiny 0.060}} & \textbf{0.666}\textsuperscript{\textcolor{gray}{\tiny 0.013}} \\
+     & NLL & $-$0.327\textsuperscript{\textcolor{gray}{\tiny 1.069}} & $-$0.315\textsuperscript{\textcolor{gray}{\tiny 1.100}} & $-$0.273\textsuperscript{\textcolor{gray}{\tiny 1.129}} & $-$0.351\textsuperscript{\textcolor{gray}{\tiny 1.116}} & $-$0.237\textsuperscript{\textcolor{gray}{\tiny 1.148}} & $-$0.301\textsuperscript{\textcolor{gray}{\tiny 1.112}} \\
+    \bottomrule
+  \end{tabular}}
+\end{table}

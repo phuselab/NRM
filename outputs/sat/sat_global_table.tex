@@ -1,0 +1,99 @@
+\begin{table}[t]
+  \centering
+  \caption{%
+        SATBench: Global comparison averaged across all perturbation levels. 
+        RMSE, Spearman's correlation ($r$) and curve steepness ($\mathcal{K}$) assess SAT alignment. \textbf{Bold} and \underline{underline} indicate the best and second-best performing models, respectively (for $\mathcal{K}$, values are relative to NC). 
+        Asymmetric 95\% confidence intervals, derived via bootstrapping ($B=1000$), are reported as superscripts/subscripts.
+    }
+  \label{tab:sat_global}
+  \footnotesize
+  \setlength{\tabcolsep}{5pt}
+  \renewcommand{\arraystretch}{1.4}
+  \resizebox{\linewidth}{!}{%
+  \begin{tabular}{@{} l ccc ccc ccc @{}}
+    \toprule
+    & \multicolumn{3}{c}{\textbf{Color \& Blur}}
+    & \multicolumn{3}{c}{\textbf{Color \& Gray}}
+    & \multicolumn{3}{c}{\textbf{Gray \& Noise}} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+    \textbf{Model}
+      & RMSE ($\downarrow$) & $r$ ($\uparrow$) & $\mathcal{K}$ ($|\Delta|\!\downarrow$)
+      & RMSE ($\downarrow$) & $r$ ($\uparrow$) & $\mathcal{K}$ ($|\Delta|\!\downarrow$)
+      & RMSE ($\downarrow$) & $r$ ($\uparrow$) & $\mathcal{K}$ ($|\Delta|\!\downarrow$) \\
+    \midrule
+    \textbf{Human~(NC)}
+      & \textbf{24.34}
+      & \textbf{0.601}
+      & \textbf{0.574}
+      & \textbf{21.62}
+      & \textbf{0.599}
+      & \textbf{0.726}
+      & \textbf{23.08}
+      & \textbf{0.551}
+      & \textbf{0.424} \\
+    \midrule
+    CNet (par.)~\citep{iuzzolino2021cascaded}
+      & \underline{31.72}$^{+4.66}_{-0.21}$
+      & \textbf{0.415}$^{+.030}_{-.267}$
+      & 1.764
+      & 27.18$^{+6.45}_{-2.11}$
+      & \underline{0.434}$^{+.055}_{-.062}$
+      & 1.696
+      & 35.48$^{+4.50}_{-5.19}$
+      & \underline{0.199}$^{+.193}_{-.109}$
+      & 1.115 \\
+    CNet (ser.)~\citep{iuzzolino2021cascaded}
+      & 33.58$^{+3.33}_{-3.07}$
+      & 0.337$^{+.055}_{-.129}$
+      & 1.494
+      & \underline{26.57}$^{+5.46}_{-3.21}$
+      & \textbf{0.470}$^{+.043}_{-.070}$
+      & 1.527
+      & \underline{30.84}$^{+3.00}_{-4.68}$
+      & \textbf{0.251}$^{+.149}_{-.053}$
+      & 0.897 \\
+    ConvRNN~\citep{spoerer2020recurrent}
+      & 50.38$^{+5.37}_{-7.13}$
+      & 0.205$^{+.033}_{-.058}$
+      & 0.778
+      & 50.72$^{+7.43}_{-4.03}$
+      & 0.084$^{+.074}_{-.119}$
+      & 1.416
+      & 32.80$^{+1.94}_{-3.90}$
+      & 0.167$^{+.190}_{-.076}$
+      & \underline{0.369} \\
+    MSDNet~\citep{huang2017multiscale}
+      & 57.74$^{+4.71}_{-6.94}$
+      & 0.001$^{+.000}_{-.000}$
+      & 1.700
+      & 31.73$^{+4.77}_{-3.70}$
+      & 0.276$^{+.024}_{-.063}$
+      & 0.563
+      & 65.96$^{+4.75}_{-10.83}$
+      & 0.001$^{+.000}_{-.000}$
+      & 1.700 \\
+    SCAN~\citep{zhang2019scan}
+      & 36.09$^{+3.72}_{-5.07}$
+      & \underline{0.371}$^{+.013}_{-.139}$
+      & \textbf{0.514}
+      & 39.50$^{+3.53}_{-3.96}$
+      & 0.128$^{+.042}_{-.035}$
+      & \underline{0.865}
+      & 47.51$^{+6.15}_{-3.09}$
+      & $-$0.065$^{+.057}_{-.040}$
+      & 0.335 \\
+    \midrule
+    NRM~(ours)
+      & \textbf{30.67}$^{+3.80}_{-0.93}$
+      & 0.282$^{+.020}_{-.168}$
+      & \underline{0.722}
+      & \textbf{24.32}$^{+3.26}_{-6.18}$
+      & 0.415$^{+.072}_{-.067}$
+      & \textbf{0.829}
+      & \textbf{29.74}$^{+4.82}_{-0.98}$
+      & 0.123$^{+.265}_{-.161}$
+      & \textbf{0.434} \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}

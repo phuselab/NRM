@@ -1,0 +1,12 @@
+# Keep notebooks diffable as text
+*.ipynb text eol=lf
+
+# Normalise line endings 
+*.py   text eol=lf
+*.md   text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.toml text eol=lf
+*.js   text eol=lf
+*.css  text eol=lf
+*.html text eol=lf

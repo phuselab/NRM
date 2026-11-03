@@ -1,0 +1,38 @@
+\begin{table}[t]
+  \centering
+  \caption{Scene Categorisation. Choice performance is measured by Acc, AUC, and Cohen's~$\kappa$ ($\kappa_{\mathrm{acc}}$); RT alignment by $r_{\rm RT}$ (correlation of per-discriminability median RT); and RT distribution fit by NLL. \textbf{Bold} = best; \underline{underline} = second best (relative to NC, or absolute for $r_{\rm RT}$ and NLL). Asymmetric 95\% CIs (bootstrap, $B{=}1000$) shown as superscripts/subscripts; NLL reports $\pm$ Std. Error of the Mean.}
+  \label{tab:sc_global}
+  \footnotesize
+  \setlength{\tabcolsep}{5pt}
+  \renewcommand{\arraystretch}{1.4}
+  \resizebox{.85\linewidth}{!}{%
+  \begin{tabular}{@{} l ccc cc @{}}
+    \toprule
+    & \multicolumn{3}{c}{\textbf{Choice}}
+    & \multicolumn{2}{c}{\textbf{RT}} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-6}
+    \textbf{Model}
+      & Acc ($|\Delta|\!\downarrow$)
+      & AUC ($|\Delta|\!\downarrow$)
+      & $\kappa_{\mathrm{acc}}$ ($|\Delta|\!\downarrow$)
+      & $r_{\rm RT}$ ($\uparrow$)
+      & NLL ($\downarrow$) \\
+    \midrule
+    \textbf{Human~(NC)} & \textbf{0.840} & \textbf{0.840} & \textbf{0.679} & \textbf{0.263} & \textbf{$-$1.413} \\
+    \midrule
+    \rowcolor{Gray}
+    \multicolumn{6}{l}{\textit{Classical Sequential Sampling Approaches}} \\
+    LNR~\citep{rouder2015lognormal} & 0.491$^{+.029}_{-.024}$ & 0.493$^{+.028}_{-.025}$ & $-$0.015$^{+.054}_{-.049}$ & 0.493$^{+.366}_{-1.181}$ & \textbf{$-$1.394}$^{\pm.018}$ \\
+    LBA~\citep{brown2008lba} & 0.513$^{+.029}_{-.023}$ & 0.518$^{+.026}_{-.026}$ & 0.033$^{+.050}_{-.050}$ & 0.170$^{+.766}_{-.817}$ & $-$1.353$^{\pm.025}$ \\
+    DDM~\citep{ratcliff2008diffusion} & 0.509$^{+.026}_{-.027}$ & 0.507$^{+.028}_{-.027}$ & 0.013$^{+.054}_{-.053}$ & 0.357$^{+.539}_{-1.152}$ & \underline{$-$1.380}$^{\pm.023}$ \\
+    \midrule
+    \rowcolor{Gray}
+    \multicolumn{6}{l}{\textit{Image-Computable Approaches}} \\
+    RTify~\citep{cheng2024rtify} & \underline{0.786}$^{+.003}_{-.037}$ & \textbf{0.873}$^{+.018}_{-.016}$ & \underline{0.562}$^{+.028}_{-.028}$ & \underline{0.791}$^{+.020}_{-1.464}$ & $-$0.042$^{\pm.025}$ \\
+    cRNN~\citep{goetschalckx2023computing} & 0.611$^{+.022}_{-.026}$ & 0.627$^{+.027}_{-.026}$ & 0.240$^{+.043}_{-.041}$ & 0.713$^{+.241}_{-1.151}$ & $-$1.063$^{\pm.013}$ \\
+    \midrule
+    NRM~(ours) & \textbf{0.834}$^{+.019}_{-.018}$ & \underline{0.916}$^{+.016}_{-.015}$ & \textbf{0.666}$^{+.037}_{-.037}$ & \textbf{0.791}$^{+.139}_{-1.351}$ & $-$0.301$^{\pm.003}$ \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}
